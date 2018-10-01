@@ -23,6 +23,7 @@ def get_market_type_file_path(instance, filename):
 class MarketType(models.Model):
     name = models.CharField(max_length=254)
     image = models.ImageField(upload_to=get_market_type_file_path, blank=True, null=True)
+    url_image = models.URLField(max_length=254, blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

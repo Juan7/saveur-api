@@ -8,7 +8,7 @@ class MarketTypeSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = models.MarketType
-        fields = ('id', 'name', 'image', 'is_active', 'created_at')
+        fields = ('id', 'name', 'image', 'url_image', 'is_active', 'created_at')
 
 
 class MarketScheduleSerializer(serializers.ModelSerializer):
