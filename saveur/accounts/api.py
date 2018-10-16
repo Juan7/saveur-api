@@ -5,7 +5,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, permissions, views, viewsets, response, mixins, status
 
-from utils import pagination
+# from utils import pagination
 
 from . import models, serializers
 
@@ -14,7 +14,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = serializers.UserSerializer
 
-    pagination_class = pagination.StandardResultsSetPagination
+    # pagination_class = pagination.StandardResultsSetPagination
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend, filters.OrderingFilter)
     queryset = User.objects.all()
     ordering = ('-pk')
@@ -33,3 +33,11 @@ class UserViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = serializer.save()
         user.profile.save()
+
+    def retrieve(self, request, pk=None):
+        """
+        If provided 'pk' is "me" then return the current user.
+        """
+        if request.user and pk == 'me':
+            return response.Response(serializers.UserSerializer(request.user).data)
+        return super().retrieve(request, pk)

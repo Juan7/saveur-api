@@ -22,6 +22,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('auth/', include('rest_auth.urls')),
     path('auth/registration/', include('rest_auth.registration.urls')),
+    path('accounts/', include('accounts.urls')),
     path('markets/', include('markets.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(
