@@ -7,6 +7,7 @@ app_name = 'markets'
 
 router = DefaultRouter()
 router.register('markets', api.MarketViewSet, base_name='api_market')
+router.register('merchants', api.MerchantViewSet, base_name='api_merchant')
 
 apipatterns = router.urls + []
 
