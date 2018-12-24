@@ -93,9 +93,13 @@ class MarketSerializer(serializers.ModelSerializer):
             data = obj.marketrate_set.filter(user=self.context['request'].user)
         else:
             data = obj.marketrate_set.values('market', 'type').aggregate(rate=Avg('rate'))
+
             data = list(data)
+            print(data)
         serializer = MarketRateSerializer(data=data, many=True)
         serializer.is_valid()
+        import pprint
+        pprint.pprint(serializer.data)
         return serializer.data
 
 class MerchantScheduleSerializer(serializers.ModelSerializer):
