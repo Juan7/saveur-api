@@ -92,7 +92,9 @@ class MarketSerializer(serializers.ModelSerializer):
         else:
             data = obj.marketrate_set.values('market', 'type').aggregate(rate=Avg('rate'))
             data = list(data)
-        return MarketRateSerializer(data=data, many=True).data
+        serializer = MarketRateSerializer(data=data, many=True)
+        serializer.is_valid()
+        return serializer.data
 
 class MerchantScheduleSerializer(serializers.ModelSerializer):
 
@@ -134,4 +136,6 @@ class MerchantSerializer(serializers.ModelSerializer):
         else:
             data = obj.merchantrate_set.values('merchant', 'type').aggregate(rate=Avg('rate'))
             data = list(data)
-        return MerchantRateSerializer(data=data, many=True).data
+        serializer = MerchantRateSerializer(data=data, many=True).data
+        serializer.is_valid()
+        return serializer.data
