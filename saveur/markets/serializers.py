@@ -25,6 +25,7 @@ class MarketRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MarketRate
         fields = (
+            'user',
             'market',
             'type',
             'rate'
@@ -36,6 +37,7 @@ class MerchantRateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MerchantRate
         fields = (
+            'user',
             'merchant',
             'type',
             'rate'
@@ -60,7 +62,7 @@ class MarketMinSerializer(serializers.ModelSerializer):
 class MarketSerializer(serializers.ModelSerializer):
     type = MarketTypeSerializer(many=False)
     schedule = MarketScheduleSerializer(many=True, source='marketschedule_set')
-    rate = MarketRateSerializer(many=True, source='marketrate_set')
+    rate = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -84,6 +86,13 @@ class MarketSerializer(serializers.ModelSerializer):
             'created_at'
         )
 
+    def get_rate(self, obj):
+        if self.context['request'].user:
+            data = obj.marketrate_set.filter(user=self.context['request'].user)
+        else:
+            data = obj.marketrate_set.values('market', 'type').aggregate(rate=Avg('rate'))
+            data = list(data)
+        return MarketRateSerializer(data=data, many=True)
 
 class MerchantScheduleSerializer(serializers.ModelSerializer):
 
@@ -98,7 +107,7 @@ class MerchantSerializer(serializers.ModelSerializer):
     market = MarketMinSerializer(many=False)
     type = MarketTypeSerializer(many=False)
     schedule = MerchantScheduleSerializer(many=True, source='merchantschedule_set')
-    rate = MerchantRateSerializer(many=True, source='merchantrate_set')
+    rate = serializers.SerializerMethodField()
 
     class Meta:
 
@@ -118,3 +127,11 @@ class MerchantSerializer(serializers.ModelSerializer):
             'is_active',
             'created_at'
         )
+
+    def get_rate(self, obj):
+        if self.context['request'].user:
+            data = obj.merchantrate_set.filter(user=self.context['request'].user)
+        else:
+            data = obj.merchantrate_set.values('merchant', 'type').aggregate(rate=Avg('rate'))
+            data = list(data)
+        return MerchantRateSerializer(data=data, many=True)

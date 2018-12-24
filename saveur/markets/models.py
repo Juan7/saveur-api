@@ -3,6 +3,7 @@ import uuid
 
 from decimal import Decimal
 
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -148,6 +149,8 @@ class MarketRate(models.Model):
         (PRICE, 'Price'),
         (ACCESS, 'Access')
     )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     market = models.ForeignKey(Market, on_delete=models.CASCADE)
     type = models.IntegerField(choices=RATE_CHOICES, default=PRODUCT)
     rate = models.FloatField(default='0.00')
@@ -169,6 +172,8 @@ class MerchantRate(models.Model):
         (PRICE, 'Price'),
         (ACCESS, 'Access')
     )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE)
     type = models.IntegerField(choices=RATE_CHOICES, default=PRODUCT)
     rate = models.FloatField(default='0.00')

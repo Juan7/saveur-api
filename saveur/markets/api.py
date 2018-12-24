@@ -32,7 +32,7 @@ class MarketViewSet(viewsets.ModelViewSet):
         rate.is_valid()
         rate_data = rate.data
 
-        models.MarketRate.objects.update_or_create(type=rate_data['type'], market=instance, defaults={'rate': rate_data['rate']})
+        models.MarketRate.objects.update_or_create(user=request.user, type=rate_data['type'], market=instance, defaults={'rate': rate_data['rate']})
 
         result = {
             'message': 'Rated!'
@@ -68,7 +68,7 @@ class MerchantViewSet(viewsets.ModelViewSet):
         rate.is_valid()
         rate_data = rate.data
 
-        models.MerchantRate.objects.update_or_create(type=rate_data['type'], merchant=instance, defaults={'rate': rate_data['rate']})
+        models.MerchantRate.objects.update_or_create(user=request.user, type=rate_data['type'], merchant=instance, defaults={'rate': rate_data['rate']})
 
         result = {
             'message': 'Rated!'
