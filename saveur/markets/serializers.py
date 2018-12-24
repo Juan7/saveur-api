@@ -134,4 +134,4 @@ class MerchantSerializer(serializers.ModelSerializer):
         else:
             data = obj.merchantrate_set.values('merchant', 'type').aggregate(rate=Avg('rate'))
             data = list(data)
-        return MerchantRateSerializer(data=data, many=True)
+        return MerchantRateSerializer(data=data, many=True).data
