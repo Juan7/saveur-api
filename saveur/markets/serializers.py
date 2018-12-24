@@ -92,7 +92,7 @@ class MarketSerializer(serializers.ModelSerializer):
         if not self.context['request'].user.is_anonymous:
             data = obj.marketrate_set.filter(user=self.context['request'].user)
         else:
-            data = obj.marketrate_set.values('market', 'type').aggregate(rate=Avg('rate'))
+            data = obj.marketrate_set.values('market', 'type').annotate(rate=Avg('rate'))
 
             data = list(data)
             print(data)
@@ -140,7 +140,7 @@ class MerchantSerializer(serializers.ModelSerializer):
         if not self.context['request'].user.is_anonymous:
             data = obj.merchantrate_set.filter(user=self.context['request'].user)
         else:
-            data = obj.merchantrate_set.values('merchant', 'type').aggregate(rate=Avg('rate'))
+            data = obj.merchantrate_set.values('merchant', 'type').annotate(rate=Avg('rate'))
             data = list(data)
         serializer = MerchantRateSerializer(data=data, many=True).data
         serializer.is_valid()
